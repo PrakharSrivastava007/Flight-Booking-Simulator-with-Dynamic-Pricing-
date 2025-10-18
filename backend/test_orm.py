@@ -1,5 +1,5 @@
-from database_connection import SessionLocal
-from models import Airline, Airport, Flight
+from backend.app.database_connection import SessionLocal
+from backend.app.models import Airline, Airport, Flight
 
 def test_orm_queries():
     db = SessionLocal()
