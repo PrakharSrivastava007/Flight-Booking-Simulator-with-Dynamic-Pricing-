@@ -1,7 +1,4 @@
-# ========================================
-# Python Flight Booking Project .gitignore
-# ========================================
-
+# Git Ignore file
 
 .env
 .env.local
