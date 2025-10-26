@@ -7,6 +7,8 @@ import asyncio
 import logging
 import os
 from dotenv import load_dotenv
+from app.middleware.rate_limiter import RateLimitMiddleware
+from app.routers import external_flights
 
 # Load environment variables
 load_dotenv()
@@ -94,6 +96,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Rate Limiting Middleware
+app.add_middleware(RateLimitMiddleware)
 
 # Exception handlers
 @app.exception_handler(RequestValidationError)
@@ -125,6 +129,7 @@ app.include_router(flights.router)
 app.include_router(bookings.router)
 app.include_router(admin.router)
 app.include_router(price_history.router)
+app.include_router(external_flights.router)
 
 # Root endpoint
 @app.get("/", tags=["Root"])
