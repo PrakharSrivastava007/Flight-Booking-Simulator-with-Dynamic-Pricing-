@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlightBook - Book Your Next Journey</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-plane-departure"></i>
+                <span>FlightBook</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="my-bookings.html">My Bookings</a></li>
+                <li id="user-display" style="display: none;"></li>
+                <li><a href="login.html" id="login-btn">Login</a></li>
+                <li><a href="register.html" class="btn-register" id="register-btn">Sign Up</a></li>
+                <li><a href="#" onclick="logout()" id="logout-btn" style="display: none;">Logout</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Explore the World with Us</h1>
+            <p class="hero-subtitle">Book flights at the best prices with dynamic pricing</p>
+            
+            <!-- Search Form -->
+            <div class="search-container">
+                <div class="search-tabs">
+                    <button class="tab-btn active" data-tab="oneway">One Way</button>
+                    <button class="tab-btn" data-tab="roundtrip">Round Trip</button>
+                </div>
+
+                <form id="flight-search-form" class="search-form">
+                    <!-- Origin and Destination -->
+                    <div class="search-row">
+                        <div class="form-group">
+                            <label for="origin">
+                                <i class="fas fa-plane-departure"></i> From
+                            </label>
+                            <input type="text" id="origin" placeholder="Enter city or airport" required 
+                                   list="origin-list" autocomplete="off">
+                            <datalist id="origin-list"></datalist>
+                            <small class="selected-airport" id="origin-selected"></small>
+                        </div>
+
+                        <div class="swap-btn" onclick="swapAirports()">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="destination">
+                                <i class="fas fa-plane-arrival"></i> To
+                            </label>
+                            <input type="text" id="destination" placeholder="Enter city or airport" required 
+                                   list="destination-list" autocomplete="off">
+                            <datalist id="destination-list"></datalist>
+                            <small class="selected-airport" id="destination-selected"></small>
+                        </div>
+                    </div>
+
+                    <!-- Date and Passengers -->
+                    <div class="search-row">
+                        <div class="form-group">
+                            <label for="departure-date">
+                                <i class="fas fa-calendar-alt"></i> Departure
+                            </label>
+                            <input type="date" id="departure-date" required>
+                        </div>
+
+                        <div class="form-group" id="return-date-group" style="display: none;">
+                            <label for="return-date">
+                                <i class="fas fa-calendar-alt"></i> Return
+                            </label>
+                            <input type="date" id="return-date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="passengers">
+                                <i class="fas fa-users"></i> Passengers
+                            </label>
+                            <select id="passengers" required>
+                                <option value="1">1 Passenger</option>
+                                <option value="2">2 Passengers</option>
+                                <option value="3">3 Passengers</option>
+                                <option value="4">4 Passengers</option>
+                                <option value="5">5 Passengers</option>
+                                <option value="6">6 Passengers</option>
+                                <option value="7">7 Passengers</option>
+                                <option value="8">8 Passengers</option>
+                                <option value="9">9 Passengers</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="seat-class">
+                                <i class="fas fa-chair"></i> Class
+                            </label>
+                            <select id="seat-class" required>
+                                <option value="economy">Economy</option>
+                                <option value="business">Business</option>
+                                <option value="first">First Class</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <button type="submit" class="btn-search">
+                        <i class="fas fa-search"></i> Search Flights
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose FlightBook?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>Dynamic Pricing</h3>
+                    <p>Get the best fares with our intelligent pricing algorithm based on real-time demand</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure Booking</h3>
+                    <p>Your transactions are protected with industry-standard security measures</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Our customer support team is always ready to assist you</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3>Multiple Airlines</h3>
+                    <p>Compare and choose from flights across major Indian carriers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Routes -->
+    <section class="popular-routes">
+        <div class="container">
+            <h2 class="section-title">Popular Routes</h2>
+            <div class="routes-grid">
+                <div class="route-card" onclick="quickSearch('DEL', 'BOM')">
+                    <div class="route-cities">
+                        <span>Delhi</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Mumbai</span>
+                    </div>
+                    <p class="route-info">Starting from ₹4,500</p>
+                </div>
+
+                <div class="route-card" onclick="quickSearch('BOM', 'BLR')">
+                    <div class="route-cities">
+                        <span>Mumbai</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Bangalore</span>
+                    </div>
+                    <p class="route-info">Starting from ₹4,200</p>
+                </div>
+
+                <div class="route-card" onclick="quickSearch('DEL', 'BLR')">
+                    <div class="route-cities">
+                        <span>Delhi</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Bangalore</span>
+                    </div>
+                    <p class="route-info">Starting from ₹5,500</p>
+                </div>
+
+                <div class="route-card" onclick="quickSearch('BOM', 'GOI')">
+                    <div class="route-cities">
+                        <span>Mumbai</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Goa</span>
+                    </div>
+                    <p class="route-info">Starting from ₹3,800</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>FlightBook</h4>
+                    <p>Your trusted partner for flight bookings across India</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="my-bookings.html">My Bookings</a></li>
+                        <li><a href="#">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> support@flightbook.com</p>
+                    <p><i class="fas fa-phone"></i> +91-1800-123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FlightBook. All rights reserved. | Virtual Internship Project</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Searching for flights...</p>
+    </div>
+
+    <!-- Error/Success Messages -->
+    <div id="error-message" class="message error-message" style="display: none;"></div>
+    <div id="success-message" class="message success-message" style="display: none;"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Populate airport datalists
+        function populateAirportLists() {
+            const originList = document.getElementById('origin-list');
+            const destinationList = document.getElementById('destination-list');
+            
+            INDIAN_AIRPORTS.forEach(airport => {
+                const option1 = document.createElement('option');
+                option1.value = `${airport.city} (${airport.code})`;
+                option1.dataset.code = airport.code;
+                originList.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = `${airport.city} (${airport.code})`;
+                option2.dataset.code = airport.code;
+                destinationList.appendChild(option2);
+            });
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const returnDateGroup = document.getElementById('return-date-group');
+                if (btn.dataset.tab === 'roundtrip') {
+                    returnDateGroup.style.display = 'block';
+                } else {
+                    returnDateGroup.style.display = 'none';
+                }
+            });
+        });
+
+        // Swap airports
+        function swapAirports() {
+            const origin = document.getElementById('origin');
+            const destination = document.getElementById('destination');
+            const temp = origin.value;
+            origin.value = destination.value;
+            destination.value = temp;
+        }
+
+        // Quick search from popular routes
+        function quickSearch(originCode, destCode) {
+            const origin = INDIAN_AIRPORTS.find(a => a.code === originCode);
+            const dest = INDIAN_AIRPORTS.find(a => a.code === destCode);
+            
+            if (origin && dest) {
+                document.getElementById('origin').value = `${origin.city} (${origin.code})`;
+                document.getElementById('destination').value = `${dest.city} (${dest.code})`;
+                
+                // Set departure date to tomorrow
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                document.getElementById('departure-date').value = formatDate(tomorrow);
+                
+                // Scroll to search form
+                document.querySelector('.search-container').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Extract airport code from input
+        function getAirportCode(value) {
+            const match = value.match(/\(([A-Z]{3})\)/);
+            return match ? match[1] : null;
+        }
+
+        // Handle form submission
+        document.getElementById('flight-search-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const originValue = document.getElementById('origin').value;
+            const destValue = document.getElementById('destination').value;
+            const departureDate = document.getElementById('departure-date').value;
+            const passengers = document.getElementById('passengers').value;
+            const seatClass = document.getElementById('seat-class').value;
+            
+            const origin = getAirportCode(originValue);
+            const destination = getAirportCode(destValue);
+            
+            if (!origin || !destination) {
+                showError('Please select valid airports from the list');
+                return;
+            }
+            
+            if (origin === destination) {
+                showError('Origin and destination cannot be the same');
+                return;
+            }
+            
+            // Save search parameters
+            const searchParams = {
+                origin,
+                destination,
+                departure_date: departureDate,
+                passengers: parseInt(passengers),
+                seat_class: seatClass
+            };
+            
+            localStorage.setItem(STORAGE_KEYS.SEARCH_PARAMS, JSON.stringify(searchParams));
+            
+            // Redirect to results page
+            window.location.href = 'results.html';
+        });
+
+        // Set min date to today
+        document.getElementById('departure-date').min = getMinDate();
+        document.getElementById('departure-date').max = getMaxDate();
+        document.getElementById('return-date').min = getMinDate();
+        document.getElementById('return-date').max = getMaxDate();
+
+        // Initialize
+        populateAirportLists();
+        updateUserDisplay();
+
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

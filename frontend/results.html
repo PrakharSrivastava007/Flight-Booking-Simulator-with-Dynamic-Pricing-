@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - FlightBook</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/results.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-plane-departure"></i>
+                    <span>FlightBook</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="my-bookings.html">My Bookings</a></li>
+                <li id="user-display" style="display: none;"></li>
+                <li><a href="login.html" id="login-btn">Login</a></li>
+                <li><a href="#" onclick="logout()" id="logout-btn" style="display: none;">Logout</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Summary -->
+    <section class="search-summary">
+        <div class="container">
+            <div class="summary-content">
+                <div class="summary-route">
+                    <h2 id="route-display"></h2>
+                    <p id="date-display"></p>
+                </div>
+                <button class="btn-modify" onclick="window.location.href='index.html'">
+                    <i class="fas fa-edit"></i> Modify Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters and Results -->
+    <section class="results-section">
+        <div class="container">
+            <div class="results-layout">
+                <!-- Sidebar Filters -->
+                <aside class="filters-sidebar">
+                    <div class="filter-card">
+                        <h3>Filter By</h3>
+                        
+                        <!-- Sort Options -->
+                        <div class="filter-group">
+                            <h4>Sort By</h4>
+                            <label class="radio-label">
+                                <input type="radio" name="sort" value="price" checked>
+                                <span>Price (Low to High)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="sort" value="duration">
+                                <span>Duration (Shortest)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="sort" value="departure_time">
+                                <span>Departure Time</span>
+                            </label>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="filter-group">
+                            <h4>Price Range</h4>
+                            <input type="range" id="price-range" min="0" max="20000" value="20000" step="500">
+                            <div class="range-labels">
+                                <span>₹0</span>
+                                <span id="price-value">₹20,000</span>
+                            </div>
+                        </div>
+
+                        <!-- Airlines -->
+                        <div class="filter-group">
+                            <h4>Airlines</h4>
+                            <div id="airline-filters"></div>
+                        </div>
+
+                        <!-- Departure Time -->
+                        <div class="filter-group">
+                            <h4>Departure Time</h4>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="morning" class="time-filter">
+                                <span>Morning (06:00 - 12:00)</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="afternoon" class="time-filter">
+                                <span>Afternoon (12:00 - 18:00)</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="evening" class="time-filter">
+                                <span>Evening (18:00 - 00:00)</span>
+                            </label>
+                        </div>
+
+                        <button class="btn-reset" onclick="resetFilters()">
+                            <i class="fas fa-redo"></i> Reset Filters
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Results Area -->
+                <main class="results-main">
+                    <div class="results-header">
+                        <h3 id="results-count">Loading flights...</h3>
+                        <div class="view-toggle">
+                            <button class="active" data-view="list"><i class="fas fa-list"></i></button>
+                            <button data-view="grid"><i class="fas fa-th"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Flight Cards Container -->
+                    <div id="flights-container" class="flights-list">
+                        <!-- Flight cards will be dynamically inserted here -->
+                    </div>
+
+                    <!-- No Results -->
+                    <div id="no-results" class="no-results" style="display: none;">
+                        <i class="fas fa-plane-slash"></i>
+                        <h3>No Flights Found</h3>
+                        <p>Try adjusting your search criteria or filters</p>
+                        <button class="btn-primary" onclick="window.location.href='index.html'">
+                            New Search
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Searching for flights...</p>
+    </div>
+
+    <!-- Messages -->
+    <div id="error-message" class="message error-message" style="display: none;"></div>
+    <div id="success-message" class="message success-message" style="display: none;"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/results.js"></script>
+</body>
+</html>
