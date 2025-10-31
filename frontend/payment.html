@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Fly High</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-plane-departure"></i>
+                    <span>Fly High</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li id="user-display"></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Progress Indicator -->
+    <div class="booking-progress">
+        <div class="container">
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Flight Details</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Passenger Info</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Section -->
+    <section class="payment-section">
+        <div class="container">
+            <div class="payment-layout">
+                <!-- Payment Methods -->
+                <main class="payment-main">
+                    <!-- Booking Timer -->
+                    <div class="booking-timer">
+                        <i class="fas fa-clock"></i>
+                        <span>Complete payment in <strong id="timer">15:00</strong> minutes</span>
+                    </div>
+
+                    <!-- Payment Options -->
+                    <div class="section-card">
+                        <h3><i class="fas fa-credit-card"></i> Select Payment Method</h3>
+                        
+                        <div class="payment-options">
+                            <!-- UPI -->
+                            <div class="payment-option" data-method="upi">
+                                <input type="radio" name="payment-method" id="upi" value="upi" checked>
+                                <label for="upi">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>UPI</span>
+                                </label>
+                            </div>
+
+                            <!-- Credit/Debit Card -->
+                            <div class="payment-option" data-method="credit_card">
+                                <input type="radio" name="payment-method" id="card" value="credit_card">
+                                <label for="card">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Credit/Debit Card</span>
+                                </label>
+                            </div>
+
+                            <!-- Net Banking -->
+                            <div class="payment-option" data-method="netbanking">
+                                <input type="radio" name="payment-method" id="netbanking" value="netbanking">
+                                <label for="netbanking">
+                                    <i class="fas fa-university"></i>
+                                    <span>Net Banking</span>
+                                </label>
+                            </div>
+
+                            <!-- Wallet -->
+                            <div class="payment-option" data-method="wallet">
+                                <input type="radio" name="payment-method" id="wallet" value="wallet">
+                                <label for="wallet">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>Wallet</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Details Form -->
+                    <div class="section-card" id="payment-details">
+                        <!-- UPI Form -->
+                        <div id="upi-form" class="payment-form active">
+                            <div class="form-group">
+                                <label>UPI ID</label>
+                                <input type="text" id="upi-id" placeholder="yourname@upi">
+                            </div>
+                            <p class="info-text">
+                                <i class="fas fa-info-circle"></i>
+                                Enter your UPI ID to proceed with payment
+                            </p>
+                        </div>
+
+                        <!-- Card Form -->
+                        <div id="card-form" class="payment-form">
+                            <div class="form-group">
+                                <label>Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="password" id="card-cvv" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Cardholder Name</label>
+                                <input type="text" id="card-name" placeholder="Name on Card">
+                            </div>
+                        </div>
+
+                        <!-- Net Banking Form -->
+                        <div id="netbanking-form" class="payment-form">
+                            <div class="form-group">
+                                <label>Select Your Bank</label>
+                                <select id="bank-select">
+                                    <option value="">Choose Bank</option>
+                                    <option value="sbi">State Bank of India</option>
+                                    <option value="hdfc">HDFC Bank</option>
+                                    <option value="icici">ICICI Bank</option>
+                                    <option value="axis">Axis Bank</option>
+                                    <option value="kotak">Kotak Mahindra Bank</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Wallet Form -->
+                        <div id="wallet-form" class="payment-form">
+                            <div class="form-group">
+                                <label>Select Wallet</label>
+                                <select id="wallet-select">
+                                    <option value="">Choose Wallet</option>
+                                    <option value="paytm">Paytm</option>
+                                    <option value="phonepe">PhonePe</option>
+                                    <option value="googlepay">Google Pay</option>
+                                    <option value="amazonpay">Amazon Pay</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="security-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Your payment information is encrypted and secure. We never store your card details.</p>
+                    </div>
+
+                    <!-- Payment Button -->
+                    <button class="btn-pay" onclick="processPayment()">
+                        Pay <span id="pay-amount">₹0</span>
+                        <i class="fas fa-lock"></i>
+                    </button>
+                </main>
+
+                <!-- Booking Summary Sidebar -->
+                <aside class="booking-sidebar">
+                    <div class="price-card">
+                        <h3>Booking Summary</h3>
+                        
+                        <div id="booking-summary">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                        
+                        <div class="fare-divider"></div>
+                        
+                        <div class="fare-total">
+                            <span>Total Amount</span>
+                            <span id="total-amount">₹0</span>
+                        </div>
+
+                        <div class="pnr-display">
+                            <strong>PNR:</strong> <span id="pnr-number"></span>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="trust-badges">
+                        <div class="badge-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>PCI DSS Compliant</span>
+                        </div>
+                        <div class="badge-item">
+                            <i class="fas fa-lock"></i>
+                            <span>256-bit SSL Encryption</span>
+                        </div>
+                        <div class="badge-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Secure Payment Gateway</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Processing payment...</p>
+    </div>
+
+    <!-- Messages -->
+    <div id="error-message" class="message error-message" style="display: none;"></div>
+    <div id="success-message" class="message success-message" style="display: none;"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/payment.js"></script>
+</body>
+</html>

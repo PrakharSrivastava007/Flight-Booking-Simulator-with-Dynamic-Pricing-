@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Fly High</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jsPDF Library for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-plane-departure"></i>
+                    <span>Fly High</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="my-bookings.html">My Bookings</a></li>
+                <li id="user-display"></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Success Section -->
+    <section class="confirmation-section">
+        <div class="container">
+            <div class="confirmation-card">
+                <!-- Success Icon -->
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+
+                <h1>Booking Confirmed!</h1>
+                <p class="subtitle">Your flight has been successfully booked</p>
+
+                <!-- PNR Display -->
+                <div class="pnr-box">
+                    <div class="pnr-label">Your PNR Number</div>
+                    <div class="pnr-value" id="pnr-display"></div>
+                    <button class="btn-copy" onclick="copyPNR()">
+                        <i class="fas fa-copy"></i> Copy PNR
+                    </button>
+                </div>
+
+                <!-- Booking Details -->
+                <div class="confirmation-details">
+                    <h3>Booking Details</h3>
+                    <div id="booking-info"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="confirmation-actions">
+                    <button class="btn-primary" onclick="window.location.href='my-bookings.html'">
+                        <i class="fas fa-list"></i> My Bookings
+                    </button>
+                    <button class="btn-download" onclick="downloadPDF()">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </button>
+                    <button class="btn-download" onclick="downloadJSON()">
+                        <i class="fas fa-file-code"></i> Download JSON
+                    </button>
+                    <button class="btn-secondary" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+
+                <!-- Email Notice -->
+                <div class="email-notice">
+                    <i class="fas fa-envelope"></i>
+                    <p>Booking confirmation has been sent to your email</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let bookingData = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserDisplay();
+            
+            const data = localStorage.getItem(STORAGE_KEYS.BOOKING_DATA);
+            
+            if (!data) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            bookingData = JSON.parse(data);
+            
+            // Display PNR
+            document.getElementById('pnr-display').textContent = bookingData.pnr;
+            
+            // Display booking info
+            displayBookingInfo();
+        });
+        
+        function displayBookingInfo() {
+            const info = `
+                <div class="detail-row">
+                    <span class="label">Booking ID:</span>
+                    <span class="value">${bookingData.BookingID}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Flight Number:</span>
+                    <span class="value">${bookingData.flight_details.flight_number}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Airline:</span>
+                    <span class="value">${bookingData.flight_details.airline || 'N/A'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Route:</span>
+                    <span class="value">${bookingData.flight_details.origin} → ${bookingData.flight_details.destination}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Departure:</span>
+                    <span class="value">${formatDateTime(bookingData.flight_details.departure)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Arrival:</span>
+                    <span class="value">${formatDateTime(bookingData.flight_details.arrival)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Passengers:</span>
+                    <span class="value">${bookingData.Num_passengers}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Class:</span>
+                    <span class="value">${bookingData.Seat_class.toUpperCase()}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Total Amount:</span>
+                    <span class="value amount">${formatCurrency(bookingData.Total_price)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Status:</span>
+                    <span class="value status">${bookingData.Booking_status.toUpperCase()}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Payment:</span>
+                    <span class="value status">${bookingData.Payment_status.toUpperCase()}</span>
+                </div>
+            `;
+            
+            document.getElementById('booking-info').innerHTML = info;
+        }
+        
+        function copyPNR() {
+            const pnr = document.getElementById('pnr-display').textContent;
+            navigator.clipboard.writeText(pnr).then(() => {
+                showSuccess('PNR copied to clipboard!');
+            });
+        }
+
+        // Download JSON Receipt
+        function downloadJSON() {
+            try {
+                const receipt = {
+                    receipt_type: "Flight Booking Receipt",
+                    receipt_id: `REC-${bookingData.pnr}-${Date.now()}`,
+                    generated_at: new Date().toISOString(),
+                    
+                    booking_information: {
+                        pnr: bookingData.pnr,
+                        booking_id: bookingData.BookingID,
+                        booking_date: bookingData.Booking_Date,
+                        booking_status: bookingData.Booking_status,
+                        payment_status: bookingData.Payment_status,
+                        payment_date: bookingData.Payment_date
+                    },
+                    
+                    flight_information: {
+                        flight_number: bookingData.flight_details.flight_number,
+                        airline: bookingData.flight_details.airline || 'N/A',
+                        origin: bookingData.flight_details.origin,
+                        destination: bookingData.flight_details.destination,
+                        departure: bookingData.flight_details.departure,
+                        arrival: bookingData.flight_details.arrival,
+                        duration: bookingData.flight_details.duration,
+                        status: bookingData.flight_details.status
+                    },
+                    
+                    passengers: bookingData.passengers.map((p, index) => ({
+                        passenger_number: index + 1,
+                        name: `${p.First_name} ${p.Last_name}`,
+                        date_of_birth: p.Date_of_birth,
+                        gender: p.Gender,
+                        nationality: p.Nationality,
+                        passport_number: p.Passport_number || 'N/A',
+                        email: p.Email,
+                        phone: p.Phone
+                    })),
+                    
+                    pricing: {
+                        seat_class: bookingData.Seat_class,
+                        number_of_passengers: bookingData.Num_passengers,
+                        total_amount: bookingData.Total_price,
+                        currency: 'INR'
+                    },
+                    
+                    metadata: {
+                        generated_by: 'Fly High Booking System',
+                        version: '1.0.0',
+                        format: 'JSON'
+                    }
+                };
+                
+                const dataStr = JSON.stringify(receipt, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                
+                const link = document.createElement('a');
+                link.setAttribute('href', dataUri);
+                link.setAttribute('download', `FlightBook_Receipt_${bookingData.pnr}.json`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showSuccess('JSON receipt downloaded successfully!');
+            } catch (error) {
+                showError('Failed to download JSON receipt');
+                console.error(error);
+            }
+        }
+
+        // Download PDF Receipt
+        function downloadPDF() {
+            try {
+                if (typeof window.jspdf === 'undefined') {
+                    showError('PDF library not loaded. Please refresh the page.');
+                    return;
+                }
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Header Background
+                doc.setFillColor(235, 32, 38);
+                doc.rect(0, 0, 210, 45, 'F');
+                
+                // Logo & Title
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(28);
+                doc.setFont(undefined, 'bold');
+                doc.text('✈ Fly High', 20, 20);
+                
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'normal');
+                doc.text('Booking Confirmation Receipt', 20, 35);
+                
+                // Reset colors
+                doc.setTextColor(0, 0, 0);
+                let y = 60;
+                
+                // PNR Highlight Box
+                doc.setFillColor(240, 240, 240);
+                doc.roundedRect(15, y - 5, 180, 18, 3, 3, 'F');
+                doc.setFontSize(18);
+                doc.setFont(undefined, 'bold');
+                doc.setTextColor(235, 32, 38);
+                doc.text(`PNR: ${bookingData.pnr}`, 20, y + 7);
+                doc.setTextColor(0, 0, 0);
+                
+                y += 30;
+                
+                // Flight Information Section
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(14);
+                doc.text('Flight Information', 20, y);
+                doc.setDrawColor(235, 32, 38);
+                doc.setLineWidth(0.5);
+                doc.line(20, y + 2, 85, y + 2);
+                
+                y += 10;
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(11);
+                
+                const flightInfo = [
+                    ['Flight Number:', bookingData.flight_details.flight_number],
+                    ['Airline:', bookingData.flight_details.airline || 'N/A'],
+                    ['Route:', `${bookingData.flight_details.origin} → ${bookingData.flight_details.destination}`],
+                    ['Departure:', formatDateTime(bookingData.flight_details.departure)],
+                    ['Arrival:', formatDateTime(bookingData.flight_details.arrival)],
+                    ['Duration:', bookingData.flight_details.duration || 'N/A']
+                ];
+                
+                flightInfo.forEach(([label, value]) => {
+                    doc.setFont(undefined, 'bold');
+                    doc.text(label, 25, y);
+                    doc.setFont(undefined, 'normal');
+                    doc.text(String(value), 80, y);
+                    y += 7;
+                });
+                
+                // Passenger Details Section
+                y += 10;
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(14);
+                doc.text('Passenger Details', 20, y);
+                doc.line(20, y + 2, 85, y + 2);
+                
+                y += 10;
+                doc.setFontSize(11);
+                
+                bookingData.passengers.forEach((passenger, index) => {
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`Passenger ${index + 1}:`, 25, y);
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`${passenger.First_name} ${passenger.Last_name}`, 80, y);
+                    y += 7;
+                    
+                    if (passenger.Email) {
+                        doc.setFont(undefined, 'italic');
+                        doc.setFontSize(9);
+                        doc.text(`Email: ${passenger.Email}`, 80, y);
+                        doc.setFontSize(11);
+                        y += 6;
+                    }
+                });
+                
+                // Payment Details Section
+                y += 10;
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(14);
+                doc.text('Payment Information', 20, y);
+                doc.line(20, y + 2, 90, y + 2);
+                
+                y += 10;
+                doc.setFontSize(11);
+                
+                const paymentInfo = [
+                    ['Class:', bookingData.Seat_class.toUpperCase()],
+                    ['Passengers:', bookingData.Num_passengers.toString()],
+                    ['Total Amount:', formatCurrency(bookingData.Total_price)],
+                    ['Booking Status:', bookingData.Booking_status.toUpperCase()],
+                    ['Payment Status:', bookingData.Payment_status.toUpperCase()],
+                    ['Booking Date:', formatDate(bookingData.Booking_Date)]
+                ];
+                
+                paymentInfo.forEach(([label, value]) => {
+                    doc.setFont(undefined, 'bold');
+                    doc.text(label, 25, y);
+                    doc.setFont(undefined, 'normal');
+                    
+                    if (label === 'Total Amount:') {
+                        doc.setTextColor(235, 32, 38);
+                        doc.setFontSize(13);
+                        doc.text(String(value), 80, y);
+                        doc.setFontSize(11);
+                        doc.setTextColor(0, 0, 0);
+                    } else {
+                        doc.text(String(value), 80, y);
+                    }
+                    y += 7;
+                });
+                
+                // Important Notes
+                y += 15;
+                doc.setFillColor(255, 243, 224);
+                doc.roundedRect(15, y - 3, 180, 25, 2, 2, 'F');
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'bold');
+                doc.text('Important Notes:', 20, y + 3);
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(9);
+                doc.text('• Please arrive at the airport at least 2 hours before departure', 20, y + 9);
+                doc.text('• Carry a valid government-issued photo ID and this receipt', 20, y + 14);
+                doc.text('• Check-in online to save time at the airport', 20, y + 19);
+                
+                // Footer
+                y = 275;
+                doc.setFillColor(50, 50, 50);
+                doc.rect(0, y, 210, 22, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(10);
+                doc.text('Thank you for booking with FlightBook!', 105, y + 7, { align: 'center' });
+                doc.setFontSize(8);
+                doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, 105, y + 13, { align: 'center' });
+                doc.text('Support: support@flightbook.com | +91-1800-123-4567', 105, y + 18, { align: 'center' });
+                
+                // Save PDF
+                doc.save(`FlyHigh_Booking_${bookingData.pnr}.pdf`);
+                
+                showSuccess('PDF receipt downloaded successfully!');
+            } catch (error) {
+                showError('Failed to generate PDF receipt');
+                console.error(error);
+            }
+        }
+    </script>
+
+    <style>
+        .confirmation-section {
+            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-xl) 0;
+            background: linear-gradient(135deg, var(--gray-light), var(--white));
+        }
+        
+        .confirmation-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--success), #66bb6a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-lg);
+            animation: scaleIn 0.5s ease;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        
+        .success-icon i {
+            font-size: 3rem;
+            color: var(--white);
+        }
+        
+        .confirmation-card h1 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .pnr-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .pnr-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .pnr-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .btn-copy {
+            background: var(--white);
+            color: var(--primary-color);
+            border: none;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .confirmation-details {
+            text-align: left;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .confirmation-details h3 {
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--gray-light);
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .detail-row .label {
+            color: var(--text-secondary);
+        }
+        
+        .detail-row .value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .detail-row .amount {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .detail-row .status {
+            color: var(--success);
+            text-transform: uppercase;
+        }
+        
+        .confirmation-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, var(--secondary-color), #0066cc);
+            color: var(--white);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .email-notice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .email-notice i {
+            color: var(--info);
+        }
+        
+        @media (max-width: 768px) {
+            .confirmation-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .pnr-value {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .navbar, .confirmation-actions, .email-notice {
+                display: none;
+            }
+            
+            .confirmation-card {
+                box-shadow: none;
+            }
+        }
+    </style>
+</body>
+</html>
