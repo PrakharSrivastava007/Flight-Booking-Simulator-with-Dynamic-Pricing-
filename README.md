@@ -1,4 +1,4 @@
-# ✈️ Flight Booking System with Dynamic Pricing
+# Flight Booking System with Dynamic Pricing
 
 ![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104-009688?logo=fastapi)
@@ -6,13 +6,13 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?logo=javascript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-> An intelligent flight booking platform with AI-powered dynamic pricing engine built for modern web applications.
+> An intelligent flight booking platform with dynamic pricing engine built for modern web applications.
 
 [Features](#-features) • [Tech Stack](#-tech-stack) • [Installation](#-installation) • [Usage](#-usage) • [API Docs](#-api-documentation)
 
 ---
 
-## 📋 Overview
+##  Overview
 
 A full-stack flight booking application that simulates real-world airline reservation systems with intelligent dynamic pricing. This project demonstrates advanced backend development, RESTful API design, database management, and responsive frontend development.
 
@@ -28,33 +28,33 @@ A full-stack flight booking application that simulates real-world airline reserv
 
 ---
 
-## ✨ Features
+##  Features
 
 ### User Features
-- ✅ User Registration & Login with JWT authentication
-- 🔍 Advanced Flight Search (origin, destination, date, class)
-- 💰 Real-time Dynamic Pricing based on market conditions
-- 🎫 Multi-passenger Booking (1-9 passengers)
-- 💳 Multiple Payment Options
-- 📄 PDF & JSON Receipt Downloads
-- 📱 Booking Management (view, cancel, history)
+-  User Registration & Login with JWT authentication
+-  Advanced Flight Search (origin, destination, date, class)
+-  Real-time Dynamic Pricing based on market conditions
+-  Multi-passenger Booking (1-9 passengers)
+-  Multiple Payment Options
+-  PDF & JSON Receipt Downloads
+-  Booking Management (view, cancel, history)
 
 ### Admin Features
-- ➕ Flight Management (add, update, delete)
-- 📊 System Statistics & Analytics
-- ⚙️ Price Control & Adjustments
-- 👥 User Activity Monitoring
+-  Flight Management (add, update, delete)
+-  System Statistics & Analytics
+-  Price Control & Adjustments
+-  User Activity Monitoring
 
 ### Advanced Features
-- 🤖 Background Market Simulator
-- 📈 Historical Price Tracking
-- 🌐 External API Integration
-- ⏱️ Auto-expire Pending Bookings (15 min)
-- 🔐 API Rate Limiting
+-  Background Market Simulator
+-  Historical Price Tracking
+-  External API Integration
+-  Auto-expire Pending Bookings (15 min)
+-  API Rate Limiting
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - **Python 3.9+** - Core language
@@ -71,34 +71,32 @@ A full-stack flight booking application that simulates real-world airline reserv
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
-Flight-Booking-System/
-├── flight_booking_backend/
-│ ├── app/
-│ │ ├── main.py # FastAPI entry point
-│ │ ├── models.py # Database models
-│ │ ├── schemas.py # Pydantic schemas
-│ │ ├── database_connection.py
-│ │ ├── routers/ # API endpoints
-│ │ ├── services/ # Business logic
-│ │ ├── utils/ # Utilities
-│ │ └── middleware/ # Middleware
-│ ├── requirements.txt
-│ ├── .env.example
-│ └── README.md
-├── frontend/
-│ ├── *.html # Pages
-│ ├── css/ # Stylesheets
-│ └── js/ # JavaScript
-└── database/
-└── database.sql # Schema & data
-
-text
+    Flight-Booking-System/
+    ├── flight_booking_backend/
+    │ ├── app/
+    │ │ ├── main.py # FastAPI entry point
+    │ │ ├── models.py # Database models
+    │ │ ├── schemas.py # Pydantic schemas
+    │ │ ├── database_connection.py
+    │ │ ├── routers/ # API endpoints
+    │ │ ├── services/ # Business logic
+    │ │ ├── utils/ # Utilities
+    │ │ └── middleware/ # Middleware
+    │ ├── requirements.txt
+    │ ├── .env.example
+    │ └── README.md
+    ├── frontend/
+    │ ├── *.html # Pages
+    │ ├── css/ # Stylesheets
+    │ └── js/ # JavaScript
+    └── database/
+    └── database.sql # Schema & data
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Python 3.9 or higher
 - MySQL 8.0 or higher
@@ -107,81 +105,71 @@ text
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### 1. Clone Repository
 
-git clone https://github.com/yourusername/flight-booking-system.git
-cd flight-booking-system
-
-text
+    git clone https://github.com/yourusername/flight-booking-system.git
+    cd flight-booking-system
 
 ### 2. Setup Database
 
-Start MySQL
-mysql -u root -p
+    Start MySQL
+    mysql -u root -p
 
-Create database
-CREATE DATABASE Flight_Booking;
-USE Flight_Booking;
-SOURCE database/database.sql;
+    Create database
+    CREATE DATABASE Flight_Booking;
+    USE Flight_Booking;
+    SOURCE database/database.sql;
 
-text
 
 ### 3. Setup Backend
 
-cd flight_booking_backend
+    cd flight_booking_backend
 
-Create virtual environment
-python -m venv venv
+    Create virtual environment
+    python -m venv venv
 
-Activate virtual environment
-Windows:
-venv\Scripts\activate
+    Activate virtual environment
+    Windows: venv\Scripts\activate
 
-macOS/Linux:
-source venv/bin/activate
+    macOS/Linux: source venv/bin/activate
 
-Install dependencies
-pip install -r requirements.txt
+    Install dependencies
+    pip install -r requirements.txt
 
-Create .env file
-cp .env.example .env
+    Create .env file
+    cp .env.example .env
 
-Edit .env with your database credentials
-text
+    Edit .env with your database credentials
 
 ### 4. Configure Environment
 
-Create `.env` file in `flight_booking_backend/`:
+    Create `.env` file in `flight_booking_backend/`:
 
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=Flight_Booking
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_USER=root
+    DB_PASSWORD=your_mysql_password
+    DB_NAME=Flight_Booking
 
-SECRET_KEY=your-secret-key-minimum-32-characters-long
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+    SECRET_KEY=your-secret-key-minimum-32-characters-long
+    ALGORITHM=HS256
+    ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-APP_NAME=Flight Booking System
-APP_VERSION=1.0.0
-SIMULATOR_INTERVAL=300
-
-text
+    APP_NAME=Flight Booking System
+    APP_VERSION=1.0.0
+    SIMULATOR_INTERVAL=300
 
 ---
 
-## ▶️ Running the Application
+## Running the Application
 
 ### Start Backend
 
-cd flight_booking_backend
-source venv/bin/activate # or venv\Scripts\activate on Windows
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
-text
+    cd flight_booking_backend source venv/bin/activate 
+    # or venv\Scripts\activate on Windows uvicorn 
+    app.main:app --reload --host 0.0.0.0 --port 8000
 
 ### Start Frontend
 
@@ -190,10 +178,9 @@ text
 2. Right-click → "Open with Live Server"
 
 **Option 2: Python HTTP Server**
-cd frontend
-python -m http.server 8080
 
-text
+    cd frontend
+    python -m http.server 8080
 
 ### Access Application
 
@@ -203,38 +190,32 @@ text
 
 ---
 
-## 📚 API Documentation
+## API Documentation
 
 Visit `http://localhost:8000/docs` for interactive Swagger UI documentation.
 
 ### Key Endpoints
 
 **Authentication**
-POST /api/v1/users/register # Register new user
-POST /api/v1/users/login # Login user
-GET /api/v1/users/me # Get user profile
-
-text
+- POST /api/v1/users/register # Register new user
+- POST /api/v1/users/login # Login user
+- GET /api/v1/users/me # Get user profile
 
 **Flights**
-POST /api/v1/flights/search # Search flights
-GET /api/v1/flights/{id} # Get flight details
-GET /api/v1/flights/airlines/list
-GET /api/v1/flights/airports/list
-
-text
+- POST /api/v1/flights/search # Search flights
+- GET /api/v1/flights/{id} # Get flight details
+- GET /api/v1/flights/airlines/list
+- GET /api/v1/flights/airports/list
 
 **Bookings**
-POST /api/v1/bookings/create
-POST /api/v1/bookings/{pnr}/confirm
-GET /api/v1/bookings/my-bookings
-DELETE /api/v1/bookings/{pnr}/cancel
-
-text
+- POST /api/v1/bookings/create
+- POST /api/v1/bookings/{pnr}/confirm
+- GET /api/v1/bookings/my-bookings
+- DELETE /api/v1/bookings/{pnr}/cancel
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Main Tables
 - **Users** - User accounts
@@ -250,16 +231,15 @@ text
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Test Backend
 
-Health check
-curl http://localhost:8000/health
+    Health check
+    curl http://localhost:8000/health
 
-Test in Swagger UI
-Navigate to http://localhost:8000/docs
-text
+    Test in Swagger UI
+    Navigate to http://localhost:8000/docs
 
 ### Test Frontend
 1. Register a new account
@@ -270,7 +250,7 @@ text
 
 ---
 
-## 📖 Usage Guide
+##  Usage Guide
 
 ### Quick Start
 
@@ -295,37 +275,7 @@ The system adjusts prices based on:
 
 ---
 
-## 🐛 Troubleshooting
-
-### Backend Issues
-
-**Database Connection Failed**
-Check MySQL is running
-Verify credentials in .env
-Ensure database exists
-mysql -u root -p -e "SHOW DATABASES;"
-
-text
-
-**Import Error in models.py**
-Fix line 4 in app/models.py:
-from app.database_connection import Base # NOT from backend.app...
-
-text
-
-### Frontend Issues
-
-**CORS Errors**
-- Use Live Server or HTTP server (not file:// protocol)
-- Backend has CORS enabled by default
-
-**401 Unauthorized**
-- Login again (token may be expired)
-- Check if JWT token exists in localStorage
-
----
-
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Please:
 
@@ -337,15 +287,15 @@ Contributions are welcome! Please:
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
-**[Prakhar Srivastava]**
+**Prakhar Srivastava**
 
 - GitHub: [@PrakharSrivastava007](https://github.com/PrakharSrivastava007)
 - LinkedIn: [Prakhar Srivastava](https://www.linkedin.com/in/prakhar-srivastava-0980b1248/)
@@ -353,7 +303,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - FastAPI for the excellent web framework
 - SQLAlchemy for powerful ORM capabilities
@@ -363,7 +313,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ---
 
-## 📊 Project Stats
+##  Project Stats
 
 - **Lines of Code**: 15,000+
 - **API Endpoints**: 30+
@@ -373,7 +323,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ---
 
-## 🗺️ Future Enhancements
+##  Future Enhancements
 
 - [ ] Email/SMS notifications
 - [ ] Multi-currency support
@@ -388,6 +338,6 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 **⭐ Star this repository if you found it helpful!**
 
-Made with ❤️ by [Prakhar Srivastava]
+Made with ❤️ by Prakhar Srivastava
 
 </div>
